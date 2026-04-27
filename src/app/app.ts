@@ -10,6 +10,7 @@ import { IPerson } from './shared/interfaces/person';
 @Component({
   selector: 'app-root',
   imports: [
+    RouterOutlet,
     Step2PersonTable, 
     Step3PersonTableInput, 
     Step4ForDirective,
@@ -38,4 +39,6 @@ export class App {
     lastname:"lastname2",
     email: "lastname2@aueb.gr"
   }
+
+  doNotShowComponents: boolean = true;
 }
