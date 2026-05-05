@@ -8,6 +8,7 @@ import {
 import {jwtDecode} from 'jwt-decode'; 
 import { Credentials, LoggedInUser } from '../../shared/interfaces/user-login.interface';
 import { UserService } from '../../shared/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-step13-user-login',
@@ -17,6 +18,9 @@ import { UserService } from '../../shared/services/user.service';
 })
 export class Step13UserLogin {
   userService = inject(UserService);
+  router = inject(Router);
+
+  user = this.userService.user;
 
   form  = new FormGroup({
     username: new FormControl('', Validators.required),
@@ -28,16 +32,17 @@ export class Step13UserLogin {
     const credentials = this.form.value as Credentials;
     this.userService.loginUser(credentials).subscribe({
       next: (response) => {
-        console.log(response);
+        // console.log(response);
         const access_token = response.token;
         localStorage.setItem('access_token', access_token)
         const decodedToken=jwtDecode(access_token) as unknown as LoggedInUser;
-        console.log("DECODED TOKEN>>", decodedToken);
+        // console.log("DECODED TOKEN>>", decodedToken);
         this.userService.user.set({
           username: decodedToken.username,
           email: decodedToken.email,
           roles: decodedToken.roles
-        })
+        });
+        this.router.navigate(['restricted-content']);
       },
       error: (error) => {
         console.log(error);
